@@ -1,0 +1,17 @@
+ll powe(ll a,ll b){
+	ll ans=1;
+	while(b){
+		if(b%2){
+			ans*=a;
+			ans%=mod;
+		}
+		a*=a;
+		b/=2;
+		a%=mod;
+	}
+	return ans;
+}
+3 3 9
+1 10 3
+2 5 3
+3 1 1

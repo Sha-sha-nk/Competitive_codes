@@ -1,0 +1,26 @@
+struct node    //defining structure 
+{
+  int prefix_count;  //counts total 
+  bool isEnd;  //boolean 
+  struct node *child[26];  //array to store presence of a-z in array 
+}*head;
+
+void pre()
+{
+  head = new node();
+  head->isEnd = false;
+  head->prefix_count = 0;
+}   //initialising head
+
+void insert(string s)  //insert string in trie tree
+{
+  node *current = head;  
+  for(int i=0 ; i<s.length(); i++)
+  {
+    if(current->child[s[i]-'a'] == NULL)
+      current->child[s[i]-'a'] = new node();
+ 
+    current = current->child[s[i]-'a'];   shift pointer from node to child of node
+  }
+  current->isEnd = true; 
+}  

@@ -1,0 +1,16 @@
+          int prime[1000000];
+          for(i=1;i<m;i++)
+          prime[i]=1;
+  
+          prime[0]=0;
+          prime[1]=0;
+          for(i=2;i<=sqrt(m);i++)
+          {
+             if(prime[i]==1)
+             {
+                 for(j=2;i*j<=m;j++)
+                 {
+                       prime[i*j]=0;
+                  }
+             }
+          }

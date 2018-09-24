@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+using namespace std;
+using ll=long long int;
+bool b[400001]={0};// visited 
+vector <ll> adj[400001];
+ll ans=0;
+void DFS ( ll s)
+{  
+      b[s]=1;
+      for (auto i : adj[s])  
+           if(b[i]==0)
+           {  
+               if(s==0) ans++;
+               DFS(i);
+           }
+}
+int main()
+{
+  fastio();
+  ll n,m,q;
+  cin>>n>>m>>q;
+  for (ll i=1;i<=q;i++)
+  {
+    ll u,v;
+    cin>>u>>v;
+    adj[u].push_back(v+n);
+    adj[v+n].push_back(u);
+  }
+  for(ll i=1;i<=n+m;i++)   adj[0].push_back(i);
+  DFS(0); 
+  cout<<ans-1<<endl;
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+}

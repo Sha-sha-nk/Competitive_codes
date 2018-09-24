@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+using namespace std;
+ll dx[6]={+1,+2,+3,+4,+5,+6};
+int main()
+{
+  ll n,m,s,l;
+  while(scanf("%ld %ld %ld %ld",&n,&m,&s,&l)==4)
+  {
+    ll d[n*m+1],p[n*m+1];
+    for(ll i=0;i<=n*m;i++)
+    {
+      d[i]=MOD;
+      p[i]=i;
+    }
+    ll a,b;
+    while(s--)
+    {
+      scanf("%ld %ld",&a,&b);
+      p[a]=b;
+    }
+    while(l--)
+    {
+      scanf("%ld %ld",&a,&b);
+      p[a]=b;
+    }
+      queue<ll> q;
+      q.push(0);
+      d[0]=0;
+      while(!q.empty())
+      {
+        ll x1=q.front();
+        q.pop();
+        //cout<<x1<<endl;
+        for(ll j=0;j<6;j++)
+        {
+          ll x2=x1+dx[j];
+          if(d[x2]==MOD && x2<=n*m)
+          {
+            while(p[x2]!=x2 && d[p[x2]]==MOD)
+            {
+              x2=p[x2];
+            }
+            if(p[x2]==x2)
+            {
+             d[x2]=d[x1]+1;
+             q.push(x2);
+             //cout<<x2<<" "<<d[x2]<<endl;
+            }
+          }
+        }
+      }
+      //for(ll i=0;i<=n*m;i++)
+      //cout<<i<<" "<<d[i]<<endl;
+      if(d[n*m]!=MOD)
+      printf("%ld\n",d[n*m]);
+      else
+      printf("-1\n");
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+} 

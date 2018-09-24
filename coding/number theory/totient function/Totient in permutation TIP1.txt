@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+using namespace std;
+#define n 10000010
+ll phi[n];
+ll a[n];
+int length[n];
+ll cnt[11];
+bool same(ll a, ll b){
+    for(int i = 0; i < 10; i ++){
+        cnt[i] = 0;
+    }
+    while(a > 0){
+        cnt[a % 10] ++;
+        a /= 10;
+    }
+    while(b > 0){
+        cnt[b % 10] --;
+        b /= 10;
+    }
+    for(int i = 0; i < 10; i ++){
+        if(cnt[i] != 0){
+            return false;
+        }
+    }
+    return true;
+}
+int main()
+{ 
+  fastio();
+  for(ll i=1;i<=n;i++) phi[i]=i,length[i]=length[i/10]+1;
+  for(ll i=2;i<=n;i++)
+  {
+    if(phi[i]==i)
+    {
+      for(ll j=i;j<=n;j+=i) phi[j]-=phi[j]/i;
+    }
+  }
+  ld max=MOD;
+  for(ll i=2;i<=n;i++)
+  { 
+
+    if(same(i,phi[i]) && length[i]==length[phi[i]])
+    {  
+       //cout<<i<<endl;
+       if(i<max*phi[i])
+       {
+         max=(i*1.0)/phi[i];
+         a[i+1]=i;
+       }
+       else if(i==max*phi[i]) a[i+1]=i;
+    }
+    if(a[i]==0)
+    a[i]=a[i-1];
+  }
+  ll t;
+  cin>>t;
+  while(t--)
+  { 
+    ll p;
+    cin>>p;
+    if(a[p]==0) cout<<"No solution."<<endl;
+    else cout<<a[p]<<endl;
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+}

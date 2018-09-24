@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+using namespace std;
+ll num(string x)
+{ 
+   ll e=0;
+  for(ll i=0;i<x.length();i++)
+  {
+    if(x[i]=='1')
+    e+=pow(2,x.length()-i-1);
+  }
+  return e;
+}
+int main()
+{
+  fastio();
+  int t;
+  cin>>t;
+  while(t--)
+  {
+     ll n;
+     cin>>n;
+     set<ll> vis; //important step so only min number with unique mod get stored
+     queue<string> q;
+     q.push("1");
+     string ans;
+     while(!q.empty())
+     {
+       string a=q.front();
+       q.pop();
+       ll m=0;
+       for(ll i=0;i<a.length();i++)
+       {
+         m=m*10+(a[i]-'0');
+         m=m%n;
+       }
+       if(m==0)
+       {
+           ans=a;
+           break;
+       }
+       else if(vis.find(m) == vis.end())
+        {
+            vis.insert(m);
+            //cout<<a<<" "<<num(a)<<" "<<m<<endl;
+            q.push(a+ "0");
+            q.push(a+ "1");
+        }
+     }
+     cout<<ans<<"\n";
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+} 

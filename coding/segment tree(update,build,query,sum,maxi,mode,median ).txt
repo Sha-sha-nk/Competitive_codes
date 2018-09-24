@@ -1,0 +1,152 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+using namespace std;
+ll arr[100001];
+struct
+{
+  ll maxi,fsum;
+} st[400004];
+void build(ll i,ll ss,ll se)
+{ 
+  if(ss==se)
+  {
+      st[i].maxi=ss;
+      st[i].fsum=arr[ss];
+      return;
+  }
+  ll mid =(ss+se)/2;
+  build(2*i,ss,mid);
+  build(2*i+1,mid+1,se);
+  if(arr[st[2*i].maxi]>=arr[st[2*i+1].maxi])
+  st[i].maxi=st[2*i].maxi;
+  else
+  st[i].maxi=st[2*i+1].maxi;
+  st[i].fsum=st[i*2].fsum+st[2*i+1].fsum;
+  return ;
+
+}
+void update(ll i,ll ss,ll se,ll index,ll value)
+{
+    if(ss==se)
+    {
+        st[i].maxi=ss;
+        st[i].fsum=arr[ss];
+        return;
+    }
+    ll mid=(ss+se)>>1;
+    if(index<=mid)
+        update(2*i,ss,mid,index,value);
+    else 
+        update(2*i+1,mid+1,se,index,value);
+    if(arr[st[2*i].maxi]>arr[st[2*i+1].maxi])
+    st[i].maxi=st[2*i].maxi;
+    else
+    st[i].maxi=st[2*i+1].maxi;
+    st[i].fsum=st[2*i].fsum+st[2*i+1].fsum;
+    
+    return;
+}
+ll querymode(ll i,ll ss,ll se,ll qs,ll qe)
+{   
+    
+    if(qe<ss || qs>se)
+    {
+      
+      return -1;
+    }
+    if(ss>=qs && qe>=se)
+    { 
+      return st[i].maxi;
+    }
+      ll mid=(ss+se)/2;
+      ll x =querymode(2*i,ss,mid,qs,qe);
+      ll y =querymode(2*i+1,mid+1,se,qs,qe);
+      if(arr[x]>=arr[y])
+      return x;
+      else
+      return y;
+    
+}
+ll queryfsum(ll i,ll ss,ll se,ll qs,ll qe)
+{
+    if(qe<ss || qs>se)
+    return 0;
+    else if(ss>=qs && qe>=se)
+    return st[i].fsum;
+    else
+    {
+      ll mid=(ss+se)/2;
+      return queryfsum(2*i,ss,mid,qs,qe) +queryfsum(2*i+1,mid+1,se,qs,qe);
+    }
+
+}
+
+ll findmedian(ll i,ll ss ,ll se ,ll qs ,ll qe,double value)
+{
+    if(ss==se)
+    return ss;
+    ll mid=(ss+se)/2;
+    if(double(st[2*i].fsum)>=value && !(qe<ss || qs>se))
+    return findmedian(2*i,ss,mid,qs,qe,value);
+    else
+    return findmedian(2*i+1,mid+1,se,qs,qe,value-double(st[2*i].fsum));
+}
+
+int main()
+{
+  fastio();
+  int t;
+  cin>>t;
+  ll n,q,c,l,r;
+  while(t--)
+  { 
+    cin>>n>>q;
+    for(ll i=1;i<=n;i++)
+    {
+      cin>>arr[i];
+    }
+    build(1,1,n);
+    while(q--)
+    { 
+      cin>>c;
+      if(c==1)
+      {
+         cin>>l>>r;
+         ll mod=querymode(1,1,n,l,r);
+         ll f=queryfsum(1,1,n,l,r);
+         double x=f/double(2)+double(queryfsum(1,1,n,1,l-1));
+         ll median =findmedian(1,1,n,l,r,x);
+         
+         ll ans=(median*mod)/(__gcd(mod,median));
+         
+         cout<<ans<<endl;
+
+      }
+      else
+      {
+               ll i,x;
+               cin >> i >> x;
+               arr[i]=x;
+               update(1,1,n,i,x);
+               
+      }
+
+    }
+
+      
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+}

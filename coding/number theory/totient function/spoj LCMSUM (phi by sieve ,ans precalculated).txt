@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+using namespace std;
+#define n 1000001
+ll phi[n];
+ll a[n];
+int main()
+{ 
+  for(ll i=1;i<=n;i++) phi[i]=i;
+  for(ll i=2;i<=n;i++)
+  {
+    if(phi[i]==i)
+    {
+      for(ll j=i;j<=n;j+=i) phi[j]-=phi[j]/i;
+    }
+  }
+
+  for(ll i=1;i<=n;i++)
+  {
+    for(ll j=i;j<=n;j+=i)
+    {
+      a[j]+=phi[i]*i;
+    }
+  }
+  ll t;
+  cin>>t;
+  while(t--)
+  {
+    ll p;
+    cin>>p;
+    cout<<(((a[p]+1)*p)>>1)<<endl;
+  }
+  fastio();
+  
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+}

@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+using namespace std;
+ 
+using ll=long long int;
+ll flag=1;
+ll d[100001];
+queue <ll> m;
+vector <ll> adj[100001];
+set <ll> w[100001];
+void BFS(ll s) {  
+      d[s]=0;
+      m.push(s);
+      while(!m.empty())
+      {
+        s=m.front();
+        m.pop();
+        w[d[s]].insert(adj[s].size());
+      for (auto i : adj[s])
+      {      
+             if(d[i]==-1) 
+             { 
+               //cout<<i<<"we"<<endl;
+               m.push(i);
+               d[i]=d[s]+1; 
+             }
+             //else
+              //cout<<"i="<<i<<endl;    
+      }
+        
+      }
+      
+}
+   
+ 
+int main()
+{
+  fastio();
+  ll n,m,q;
+  cin>>n>>m>>q;
+  for (ll i=0;i<m;i++)
+  {
+    ll u,v;
+    cin>>u>>v;
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+  }
+  for (ll i=1;i<=n;i++)
+    {
+        d[i]=-1;
+    }
+  BFS(1);
+  while(q--)
+  { 
+    //cout<<"q="<<q<<endl;
+    ll D,k;
+    cin>>D>>k;
+    if(w[D].find(k)!=w[D].end())
+			cout<<"YES\n";
+		else
+			cout<<"NO\n";
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+} 

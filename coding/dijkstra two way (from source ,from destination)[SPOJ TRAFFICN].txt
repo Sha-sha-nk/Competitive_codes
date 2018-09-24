@@ -1,0 +1,117 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define fastio() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define MOD 1000000007
+#define min3(a,b,c) min(a,min(b,c))
+#define max3(a,b,c) max(a,max(b,c))
+#define FOR(a,n) for(int i=a;i<n;++i)
+#define arrin(n) for(int i=0; i < n; ++i) cin>>arr[i];
+#define arrout(n) for(int i=0; i < n; ++i) cout<<arr[i]<<" ";cout<<nl;
+#define nl "\n"
+#define mp make_pair
+typedef unsigned long long ull;
+typedef long long int ll;
+typedef long double ld;
+typedef pair<ll,ll> iPair;
+vector  <pair<ll, ll> > adj1[10001];
+vector  <pair<ll, ll> > adj2[10001];
+ll dis1[10001];
+ll dis2[10001];
+void shortest_path_source(ll s)
+{
+   dis1[s]=0;
+   priority_queue< iPair, vector <iPair> , greater<iPair> > pq1;
+   pq1.push(mp(0,s));
+   while(!pq1.empty())
+   {
+        ll u = pq1.top().second;
+        pq1.pop();
+        for (auto i: adj1[u])
+        {
+            ll v = i.first;
+            ll weight = i.second;
+            if (dis1[v] > dis1[u] + weight)
+            {
+                dis1[v] = dis1[u] + weight;
+                pq1.push(make_pair(dis1[v], v));
+            }
+        }
+   }
+}
+void shortest_path_sink(ll s)
+{
+   dis2[s]=0;
+   priority_queue< iPair, vector <iPair> , greater<iPair> > pq2;
+   pq2.push(mp(0,s));
+   while(!pq2.empty())
+   {
+        ll u = pq2.top().second;
+        pq2.pop();
+        for (auto i: adj2[u])
+        {
+            ll v = i.first;
+            ll weight = i.second;
+            if (dis2[v] > dis2[u] + weight)
+            {
+                dis2[v] = dis2[u] + weight;
+                pq2.push(make_pair(dis2[v], v));
+            }
+        }
+   }
+}
+int main()
+{
+  fastio();
+  int t;
+  cin>>t;
+  while(t--)
+  {
+    ll n,m,k,s,t;
+    cin>>n>>m>>k>>s>>t;
+    for(ll i=1;i<=m;i++)
+    { 
+        ll u,v,w; 
+        cin>>u>>v>>w;
+        adj1[u].push_back(make_pair(v,w));
+        adj2[v].push_back(make_pair(u,w));
+    }
+    for(ll i=1;i<=n;i++)
+    {
+        dis1[i]=MOD;
+        dis2[i]=MOD;
+    }
+    shortest_path_source(s);
+    shortest_path_sink(t);
+    /*
+    for(ll i=1;i<=n;i++)
+    {
+        cout<<dis1[i]<<" ";
+    }
+    cout<<endl;
+    for(ll i=1;i<=n;i++)
+    {
+        cout<<dis2[i]<<" ";
+    }
+    cout<<endl;
+    */
+    ll p,q,r;
+    ll ans=dis1[t];
+    for(ll i=1;i<=k;i++)
+    { 
+        cin>>p>>q>>r;
+        //cout<<dis1[t]<<" "<<dis1[p]<<" "<<dis2[q]<<" "<<r<<" "<<dis1[q]<<" "<<dis2[p]<<" "<<r<<endl;
+        ans=min(ans,min(dis1[p]+dis2[q]+r,dis1[q]+dis2[p]+r));
+    }
+    if(ans==MOD)
+    ans=-1;
+    cout<<ans<<endl;
+    for(ll i=1;i<=n;i++)
+    {
+      adj1[i].clear();
+      adj2[i].clear();
+    }
+  }
+  cerr << "Time : " << (double)clock() / (double)CLOCKS_PER_SEC << "s\n";
+  return 0;
+} 

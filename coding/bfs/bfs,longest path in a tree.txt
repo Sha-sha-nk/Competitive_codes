@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long int;
+ll flag=1;
+ll d[10001];
+queue <ll> m;
+vector <ll> adj[10001];
+pair<ll,ll> BFS(ll s,ll n) {  
+      d[s]=0;
+      m.push(s);
+      while(!m.empty())
+      {
+        s=m.front();
+        m.pop();
+      for (auto i : adj[s])
+      {      
+             if(d[i]==-1) 
+             { 
+               //cout<<i<<"we"<<endl;
+               m.push(i);
+               d[i]=d[s]+1; 
+             }
+             //else
+              //cout<<"i="<<i<<endl;    
+      }
+      }
+      ll max=0,maxi;
+      for(ll i=1;i<=n;i++)
+      {
+          if(d[i]>max)
+          {
+            max=d[i];
+            maxi=i;
+          }
+      }
+    return make_pair(max,maxi);
+}
+   
+
+int main()
+{
+  ll n;
+  cin>>n;
+  for (ll i=0;i<n-1;i++)
+  {
+    ll u,v;
+    cin>>u>>v;
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+  }
+  for(ll i=1;i<=n;i++)
+  d[i]=-1;
+  pair<ll,ll> x=BFS(1,n);
+  for(ll i=1;i<=n;i++)
+  d[i]=-1;
+  pair<ll,ll> y=BFS(x.second,n);
+  cout<<y.first<<endl;
+  return 0;
+}
